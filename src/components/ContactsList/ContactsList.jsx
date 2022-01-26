@@ -12,7 +12,7 @@ export const ContactsList = ({ contacts, onDeleteContact }) => {
           number={number}
           id={id}
           onDeleteContact={onDeleteContact}
-        ></Contact>
+        />
       ))}
     </Contacts>
   );

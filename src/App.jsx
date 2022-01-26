@@ -45,7 +45,7 @@ export const App = () => {
   return (
     <>
       <Section title={"Phonebook"}>
-        <ContactForm onSabmit={addContact}></ContactForm>
+        <ContactForm onSabmit={addContact} />
       </Section>
       <Section title="Contacts">
         <Filter onChange={filterContacts} filter={filter}>
@@ -54,7 +54,7 @@ export const App = () => {
         <ContactsList
           contacts={findedContacts}
           onDeleteContact={deleteContact}
-        ></ContactsList>
+        />
       </Section>
     </>
   );
