@@ -12,7 +12,6 @@ export const App = () => {
 
   useEffect(() => {
     window.localStorage.setItem(KEY, JSON.stringify(contacts));
-    console.log("контакти");
   }, [contacts]);
 
   useEffect(() => {
@@ -20,7 +19,6 @@ export const App = () => {
       contact.name.toLowerCase().includes(filter)
     );
     setFindedContacts(filteredContacts);
-    console.log("фильтер");
   }, [filter, contacts]);
 
   const generateId = () => nanoid();
