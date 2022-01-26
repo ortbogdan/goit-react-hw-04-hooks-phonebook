@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Section, ContactsList, ContactForm, Filter } from "./components/index";
 import { nanoid } from "nanoid";
 const KEY = "contacts";
@@ -8,18 +8,17 @@ export const App = () => {
     () => JSON.parse(window.localStorage.getItem(KEY)) ?? []
   );
   const [filter, setFilter] = useState("");
-  const [findedContacts, setFindedContacts] = useState([]);
 
-  useEffect(() => {
-    window.localStorage.setItem(KEY, JSON.stringify(contacts));
-  }, [contacts]);
+  useEffect(
+    () => window.localStorage.setItem(KEY, JSON.stringify(contacts)),
+    [contacts]
+  );
 
-  useEffect(() => {
-    const filteredContacts = contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(filter)
-    );
-    setFindedContacts(filteredContacts);
-  }, [filter, contacts]);
+  const filteredContacts = useMemo(
+    () =>
+      contacts.filter((contact) => contact.name.toLowerCase().includes(filter)),
+    [filter, contacts]
+  );
 
   const generateId = () => nanoid();
 
@@ -32,6 +31,7 @@ export const App = () => {
       return;
     }
     setContacts([{ name, id: generateId(), number }, ...contacts]);
+    setFilter("");
   };
   const filterContacts = (event) => {
     setFilter(event.currentTarget.value.toLowerCase());
@@ -52,7 +52,7 @@ export const App = () => {
           Find contacts by name
         </Filter>
         <ContactsList
-          contacts={findedContacts}
+          contacts={filteredContacts}
           onDeleteContact={deleteContact}
         />
       </Section>
