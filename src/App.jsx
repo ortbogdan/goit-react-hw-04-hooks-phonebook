@@ -1,4 +1,3 @@
-// import React, { Component } from 'react';
 import { useState, useEffect } from "react";
 import { Section, ContactsList, ContactForm, Filter } from "./components/index";
 import { nanoid } from "nanoid";
@@ -9,10 +8,20 @@ export const App = () => {
     () => JSON.parse(window.localStorage.getItem(KEY)) ?? []
   );
   const [filter, setFilter] = useState("");
+  const [findedContacts, setFindedContacts] = useState([]);
 
   useEffect(() => {
     window.localStorage.setItem(KEY, JSON.stringify(contacts));
+    console.log("контакти");
   }, [contacts]);
+
+  useEffect(() => {
+    const filteredContacts = contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter)
+    );
+    setFindedContacts(filteredContacts);
+    console.log("фильтер");
+  }, [filter, contacts]);
 
   const generateId = () => nanoid();
 
@@ -25,34 +34,23 @@ export const App = () => {
       return;
     }
     setContacts([{ name, id: generateId(), number }, ...contacts]);
-    console.log(contacts);
   };
   const filterContacts = (event) => {
-    setFilter(event.currentTarget.value);
+    setFilter(event.currentTarget.value.toLowerCase());
   };
   const deleteContact = (id) => {
     setContacts((prevState) =>
       prevState.filter((contact) => contact.id !== id)
     );
   };
-  const findContacts = () => {
-    const normalizeFilter = filter.toLowerCase();
-    const filteredContacts = contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(normalizeFilter)
-    );
-    return filteredContacts;
-  };
-  const findedContacts = findContacts();
+
   return (
     <>
       <Section title={"Phonebook"}>
-        <ContactForm
-          onSabmit={addContact}
-          idGenerator={generateId}
-        ></ContactForm>
+        <ContactForm onSabmit={addContact}></ContactForm>
       </Section>
       <Section title="Contacts">
-        <Filter idGenerator={generateId} onChange={filterContacts}>
+        <Filter onChange={filterContacts} filter={filter}>
           Find contacts by name
         </Filter>
         <ContactsList
