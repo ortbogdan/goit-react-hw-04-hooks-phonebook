@@ -7,12 +7,17 @@ export const Button = ({
   contactId,
   onDeleteContact,
 }) => {
+  const onBtnClick = (e) => {
+    e.target.blur();
+  };
   return onDeleteContact ? (
     <PageButton type={type} onClick={() => onDeleteContact(contactId)}>
       {children}
     </PageButton>
   ) : (
-    <PageButton type={type}>{children}</PageButton>
+    <PageButton type={type} onClick={onBtnClick}>
+      {children}
+    </PageButton>
   );
 };
 Button.propTypes = {
